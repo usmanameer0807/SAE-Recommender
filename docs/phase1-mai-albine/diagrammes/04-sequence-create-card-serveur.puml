@@ -1,0 +1,36 @@
+@startuml
+
+title Sequence CREATE_CARD - Cote serveur
+
+participant "Socket" as S
+participant "client_handler" as CH
+participant "protocol" as P
+participant "carte" as C
+participant "blockchain" as BC
+participant "db" as DB
+participant "PostgreSQL" as PG
+
+S -> CH : read() requete
+CH -> P : parse_json()
+P -> CH : action = "CREATE_CARD"
+
+CH -> C : create_card(title, paradigm, ...)
+C -> C : verifie donnees
+C -> C : genere card_id
+C -> BC : mine_block("ACTION_CREATE_CARD")
+BC -> DB : save_block_to_db()
+DB -> PG : INSERT INTO blocks
+PG --> DB : OK
+BC --> C : bloc ajoute
+
+C -> DB : INSERT INTO cards
+DB -> PG : INSERT
+PG --> DB : OK
+DB --> C : OK
+
+C --> CH : card_id
+CH -> P : create_json_response()
+P --> CH : {"status":"OK","action":"CARD_CREATED"}
+CH -> S : send() reponse
+CH -> S : broadcast NEW_CARD
+@enduml

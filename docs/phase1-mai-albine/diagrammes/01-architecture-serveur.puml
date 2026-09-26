@@ -1,0 +1,57 @@
+@startuml
+skinparam componentStyle rectangle
+skinparam defaultFontSize 12
+
+title Architecture du Serveur C
+
+package "Serveur C" {
+  package "Boucle principale" {
+    [main.c]
+  }
+  package "Reseau" {
+    [network.c]
+    [client_handler.c]
+  }
+  package "Metier" {
+    [carte.c]
+    [battle.c]
+    [legitimation.c]
+  }
+  package "Technique" {
+    [blockchain.c]
+    [db.c]
+    [protocol.c]
+    [utils.c]
+  }
+}
+
+database "PostgreSQL" as DB
+
+[main.c] --> [network.c]
+[network.c] --> [client_handler.c]
+[client_handler.c] --> [protocol.c]
+[protocol.c] --> [carte.c]
+[protocol.c] --> [battle.c]
+[protocol.c] --> [legitimation.c]
+[carte.c] --> [blockchain.c]
+[battle.c] --> [blockchain.c]
+[legitimation.c] --> [blockchain.c]
+[blockchain.c] --> [db.c]
+[db.c] --> DB
+
+note right of [client_handler.c]
+  1 thread par client
+  pthread_create()
+end note
+
+note right of [blockchain.c]
+  SHA-256
+  Preuve de travail
+  Mutex
+end note
+
+note right of [db.c]
+  libpq
+  INSERT/SELECT
+end note
+@enduml

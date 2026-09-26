@@ -1,0 +1,37 @@
+@startuml
+
+title Sequence AUTHENTICATE_CARD - Cote serveur
+
+participant "Socket" as S
+participant "client_handler" as CH
+participant "protocol" as P
+participant "legitimation" as L
+participant "blockchain" as BC
+participant "db" as DB
+participant "PostgreSQL" as PG
+
+S -> CH : read() requete
+CH -> P : parse_json()
+P -> CH : action = "AUTHENTICATE_CARD"
+
+CH -> L : authenticate_card(user_id, card_id)
+L -> L : verifie user legitime
+L -> L : verifie carte non authentifiee
+L -> L : value = value + 10
+L -> L : is_authenticated = true
+L -> BC : mine_block("ACTION_AUTHENTICATE_CARD")
+BC -> DB : save_block_to_db()
+DB -> PG : INSERT INTO blocks
+PG --> DB : OK
+
+L -> DB : UPDATE cards SET value, is_authenticated
+DB -> PG : UPDATE
+PG --> DB : OK
+DB --> L : OK
+
+L --> CH : new_value
+CH -> P : create_json_response()
+P --> CH : {"status":"OK","action":"CARD_AUTHENTICATED"}
+CH -> S : send() reponse
+CH -> S : broadcast CARD_UPDATED
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+
+title Sequence LOGIN - Cote serveur
+
+participant "Socket" as S
+participant "client_handler" as CH
+participant "protocol" as P
+participant "blockchain" as BC
+participant "db" as DB
+participant "PostgreSQL" as PG
+
+S -> CH : read() requete
+CH -> P : parse_json()
+P -> CH : action = "LOGIN"
+
+CH -> CH : verifie pseudo deja pris
+CH -> CH : cree Utilisateur
+CH -> BC : mine_block("ACTION_LOGIN")
+BC -> BC : SHA-256 + nonce
+BC -> DB : save_block_to_db()
+DB -> PG : INSERT INTO blocks
+PG --> DB : OK
+DB --> BC : OK
+BC --> CH : bloc ajoute
+
+CH -> CH : reconstitue contexte
+CH -> DB : SELECT cartes, recos
+DB -> PG : SELECT
+PG --> DB : donnees
+DB --> CH : donnees
+CH -> P : create_json_response()
+P --> CH : {"status":"OK","action":"LOGIN_SUCCESS"}
+CH -> S : send() reponse
+@enduml
