@@ -1,0 +1,36 @@
+@startuml
+skinparam componentStyle rectangle
+skinparam defaultFontSize 12
+
+title Architecture globale - SAE-Recommender
+
+package "CLIENT JAVA / JAVAFX" {
+  [JavaFX GUI]
+  [Controllers]
+  [NetworkClient]
+  [Modele]
+}
+
+package "SERVEUR C" {
+  [Sockets]
+  [Multitache]
+  [Logique metier]
+  [Blockchain]
+}
+
+database "PostgreSQL" {
+  [Tables]
+  [Blocs]
+}
+
+[JavaFX GUI] --> [Controllers]
+[Controllers] --> [NetworkClient]
+[NetworkClient] --> [Modele]
+[NetworkClient] --> [Sockets] : Socket TCP\n(IP + Port)
+[Sockets] --> [Multitache]
+[Multitache] --> [Logique metier]
+[Logique metier] --> [Blockchain]
+[Blockchain] --> [Tables]
+[Blockchain] --> [Blocs]
+
+@enduml

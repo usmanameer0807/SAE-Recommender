@@ -1,0 +1,34 @@
+@startuml
+
+title Sequence DISCONNECT - Deconnexion
+
+actor Utilisateur
+participant "MainController" as MC
+participant "NetworkClient" as NC
+participant "Serveur C" as SC
+participant "Autres clients" as AC
+
+Utilisateur -> MC : clic Quitter
+MC -> MC : confirmation
+MC -> NC : send DISCONNECT
+
+NC -> SC : {"action":"DISCONNECT"}
+
+SC -> SC : libere la socket
+SC -> SC : sauvegarde les blocs en BDD
+
+alt succes
+    SC -> NC : {"status":"OK","action":"DISCONNECTED"}
+    NC -> MC : callback
+    NC -> SC : close socket
+    SC -> AC : {"status":"NOTIFY","action":"USER_DISCONNECTED"}
+
+    MC -> MC : Platform.exit
+    MC -> Utilisateur : Ferme la fenetre
+
+else serveur injoignable
+    MC -> NC : close forcee
+    MC -> Utilisateur : Ferme la fenetre
+end
+
+@enduml

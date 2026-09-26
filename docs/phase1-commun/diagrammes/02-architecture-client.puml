@@ -1,0 +1,82 @@
+@startuml
+skinparam componentStyle rectangle
+skinparam defaultFontSize 12
+
+title Architecture du Client JavaFX
+
+package "Client JavaFX" {
+
+  package "Couche 1 - Vue (FXML + CSS)" {
+    [login.fxml]
+    [main.fxml]
+    [cards.fxml]
+    [card_view.fxml]
+    [create_card.fxml]
+    [battles.fxml]
+    [profile.fxml]
+    [style.css]
+  }
+
+  package "Couche 2 - Controleurs (Java)" {
+    [LoginController]
+    [MainController]
+    [CardController]
+    [CardViewController]
+    [CreateCardController]
+    [BattleController]
+  }
+
+  package "Couche 3 - Reseau" {
+    [NetworkClient]
+  }
+
+  package "Couche 4 - Modele" {
+    [Card]
+    [User]
+    [Recommendation]
+    [Battle]
+    [Vote]
+    [Legitimacy]
+    [Request]
+    [Response]
+  }
+
+  package "Couche 5 - Serialisation" {
+    [Gson]
+  }
+
+}
+
+component "Serveur C" as SRV
+
+[login.fxml] --> [LoginController]
+[main.fxml] --> [MainController]
+[cards.fxml] --> [CardController]
+[card_view.fxml] --> [CardViewController]
+[create_card.fxml] --> [CreateCardController]
+[battles.fxml] --> [BattleController]
+
+[LoginController] --> [MainController]
+[MainController] --> [CardController]
+[MainController] --> [BattleController]
+[CardController] --> [CardViewController]
+[CardController] --> [CreateCardController]
+
+[CardController] --> [NetworkClient]
+[BattleController] --> [NetworkClient]
+
+[NetworkClient] --> [Request]
+[NetworkClient] --> [Response]
+[NetworkClient] --> [Card]
+[NetworkClient] --> [User]
+[NetworkClient] --> [Battle]
+
+[NetworkClient] --> [Gson]
+
+[Card] --> [Recommendation]
+[Card] --> [Legitimacy]
+[Battle] --> [Vote]
+
+[NetworkClient] --> SRV
+
+@enduml

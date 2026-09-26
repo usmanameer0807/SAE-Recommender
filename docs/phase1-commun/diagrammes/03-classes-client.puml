@@ -1,0 +1,124 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+title Diagramme de classes - Client JavaFX
+
+class NetworkClient {
+  - socket : Socket
+  - in : BufferedReader
+  - out : PrintWriter
+  - gson : Gson
+  - listeners : List
+  --
+  + connect(ip, port, username)
+  + send(Request)
+  + listenLoop()
+  + addListener(handler)
+  + close()
+}
+
+class Request {
+  - action : String
+  - payload : Map
+  --
+  + put(key, value)
+}
+
+class Response {
+  - status : String
+  - action : String
+  - data : Map
+  - code : String
+  - message : String
+  --
+  + isOk() : boolean
+  + isError() : boolean
+}
+
+class Card {
+  - id : String
+  - title : String
+  - paradigm : String
+  - description : String
+  - typing : String
+  - difficulty : String
+  - yearCreated : int
+  - imageUrl : String
+  - creator : String
+  - owner : String
+  - status : String
+  - value : int
+  - isAuthenticated : boolean
+  - authenticatedBy : String
+  - authenticatedAt : String
+  - winCount : int
+  - isLegitimate : boolean
+  - stakeVA : int
+  - createdAt : String
+}
+
+class User {
+  - id : String
+  - username : String
+  - isBot : boolean
+  - recoCount : int
+  - legitimacyCount : int
+}
+
+class Recommendation {
+  - cardId : String
+  - userId : String
+  - date : String
+}
+
+class Battle {
+  - id : String
+  - card1Id : String
+  - card2Id : String
+  - card1VA : int
+  - card2VA : int
+  - card1Votes : int
+  - card2Votes : int
+  - duration : int
+  - endTime : String
+  - status : String
+  - winnerId : String
+}
+
+class Vote {
+  - battleId : String
+  - userId : String
+  - cardId : String
+  - weight : int
+  - signature : String
+  - votedAt : String
+}
+
+class Legitimacy {
+  - id : String
+  - cardId : String
+  - userId : String
+  - status : String
+  - requestedAt : String
+  - grantedAt : String
+}
+
+class Notification {
+  - type : String
+  - from : String
+  - message : String
+}
+
+NetworkClient --> Request
+NetworkClient --> Response
+NetworkClient --> Card
+NetworkClient --> User
+NetworkClient --> Battle
+Card --> User
+Card --> Recommendation
+Card --> Legitimacy
+Battle --> Card
+Battle --> Vote
+Card --> Notification
+
+@enduml

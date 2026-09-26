@@ -1,0 +1,100 @@
+@startuml
+skinparam linetype ortho
+
+title Schema relationnel - PostgreSQL
+
+entity "users" {
+  * id : SERIAL [PK]
+  --
+  username : VARCHAR(50) UNIQUE
+  is_bot : BOOLEAN
+  reco_count : INT
+  legitimacy_count : INT
+  created_at : TIMESTAMP
+}
+
+entity "cards" {
+  * id : SERIAL [PK]
+  --
+  title : VARCHAR(100)
+  paradigm : VARCHAR(30)
+  description : TEXT
+  typing : VARCHAR(20)
+  difficulty : VARCHAR(20)
+  year_created : INT
+  image_url : VARCHAR(500)
+  creator_id : INT [FK]
+  owner_id : INT [FK]
+  status : VARCHAR(20)
+  value : INT
+  is_authenticated : BOOLEAN
+  authenticated_by : INT [FK]
+  win_count : INT
+  is_legitimate : BOOLEAN
+  stake_va : INT
+  created_at : TIMESTAMP
+}
+
+entity "recommendations" {
+  * id : SERIAL [PK]
+  --
+  card_id : INT [FK]
+  user_id : INT [FK]
+  active : BOOLEAN
+  created_at : TIMESTAMP
+}
+
+entity "battles" {
+  * id : SERIAL [PK]
+  --
+  card1_id : INT [FK]
+  card2_id : INT [FK]
+  winner_id : INT
+  status : VARCHAR(20)
+  started_at : TIMESTAMP
+  ended_at : TIMESTAMP
+}
+
+entity "votes" {
+  * id : SERIAL [PK]
+  --
+  battle_id : INT [FK]
+  user_id : INT [FK]
+  card_id : INT [FK]
+  weight : INT
+  signature : VARCHAR(256)
+  voted_at : TIMESTAMP
+}
+
+entity "legitimacies" {
+  * id : SERIAL [PK]
+  --
+  card_id : INT [FK]
+  user_id : INT [FK]
+  status : VARCHAR(20)
+  requested_at : TIMESTAMP
+  granted_at : TIMESTAMP
+}
+
+entity "blocks" {
+  * id : SERIAL [PK]
+  --
+  timestamp : BIGINT
+  data : JSONB
+  prev_hash : CHAR(64)
+  nonce : BIGINT
+  hash : CHAR(64)
+  created_at : TIMESTAMP
+}
+
+users ||--o{ cards : creator
+users ||--o{ cards : owner
+users ||--o{ recommendations : emet
+users ||--o{ votes : vote
+users ||--o{ legitimacies : demande
+cards ||--o{ recommendations : recoit
+cards ||--o{ battles : participe
+cards ||--o{ legitimacies : concerne
+battles ||--o{ votes : recoit
+
+@enduml
