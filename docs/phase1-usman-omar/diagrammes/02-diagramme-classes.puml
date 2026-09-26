@@ -1,0 +1,78 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+title Diagramme de classes - Client JavaFX
+
+class NetworkClient {
+  - socket : Socket
+  - in : BufferedReader
+  - out : PrintWriter
+  - gson : Gson
+  --
+  + connect(ip, port, username)
+  + send(Request)
+  + listenLoop()
+  + close()
+}
+
+class Request {
+  - action : String
+  - payload : Map
+}
+
+class Response {
+  - status : String
+  - action : String
+  - data : Map
+  - code : String
+  - message : String
+}
+
+class Card {
+  - id : String
+  - title : String
+  - paradigm : String
+  - description : String
+  - typing : String
+  - difficulty : String
+  - yearCreated : int
+  - creator : String
+  - owner : String
+  - status : String
+  - value : int
+  - isAuthenticated : boolean
+  - winCount : int
+  - isLegitimate : boolean
+}
+
+class User {
+  - id : String
+  - username : String
+  - isBot : boolean
+  - recoCount : int
+  - legitimacyCount : int
+}
+
+class Battle {
+  - id : String
+  - card1Id : String
+  - card2Id : String
+  - status : String
+  - winnerId : String
+}
+
+class Vote {
+  - battleId : String
+  - userId : String
+  - cardId : String
+  - weight : int
+}
+
+NetworkClient --> Request
+NetworkClient --> Response
+NetworkClient --> Card
+NetworkClient --> User
+Card --> User
+Battle --> Card
+Battle --> Vote
+@enduml

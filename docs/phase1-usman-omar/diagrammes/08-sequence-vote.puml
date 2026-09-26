@@ -1,0 +1,29 @@
+@startuml
+
+title Sequence VOTE_BATTLE
+
+actor "Utilisateur B" as U2
+participant "BattleController" as BC
+participant "NetworkClient" as NC
+participant "Serveur C" as SC
+participant "Autres clients" as AC
+
+U2 -> BC : clic Voter
+BC -> NC : send VOTE_BATTLE
+NC -> SC : {"action":"VOTE_BATTLE"}
+
+SC -> SC : verifie pas deja vote
+SC -> SC : calcule poids
+SC -> SC : mine un bloc
+
+alt succes
+    SC -> NC : {"status":"OK","action":"VOTE_REGISTERED"}
+    SC -> AC : {"status":"NOTIFY","action":"BATTLE_UPDATE"}
+    NC -> BC : callback
+    BC -> U2 : MAJ affichage
+else deja vote
+    SC -> NC : {"status":"ERROR","code":"ALREADY_VOTED"}
+    NC -> BC : callback
+    BC -> U2 : Message d'erreur
+end
+@enduml

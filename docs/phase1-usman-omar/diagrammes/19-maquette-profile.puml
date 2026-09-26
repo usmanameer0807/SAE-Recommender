@@ -1,0 +1,26 @@
+@startsalt
+{+
+  Profil utilisateur
+  .
+  ---
+  Utilisateur : usman (u_001)
+  Valeur VA   : 30
+  Cartes      : 3
+  Recos emises: 5
+  Recos recues: 20
+  Legitimations : 1
+  Authentifications : 1
+  .
+  ---
+  Utilisateurs connectes :
+  .
+  {+
+    { (o) usman }
+    { (o) alice }
+    { (o) bob }
+  }
+  .
+  ---
+  { [Se deconnecter] }
+}
+@endsalt

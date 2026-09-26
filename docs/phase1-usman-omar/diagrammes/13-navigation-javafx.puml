@@ -1,0 +1,28 @@
+@startuml
+
+title Navigation entre les ecrans JavaFX
+
+[*] --> login
+
+state login {
+  state "login.fxml" as L
+}
+
+login --> main : LOGIN_SUCCESS
+
+state main {
+  state "main.fxml (TabPane)" as M
+  state "Cartes" as TAB1
+  state "Mes cartes" as TAB2
+  state "Recommandations" as TAB3
+  state "Battles" as TAB4
+  state "Profil" as TAB5
+  M --> TAB1
+  M --> TAB2
+  M --> TAB3
+  M --> TAB4
+  M --> TAB5
+}
+
+main --> [*] : DISCONNECT
+@enduml
