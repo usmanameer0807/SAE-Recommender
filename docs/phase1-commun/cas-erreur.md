@@ -2,7 +2,6 @@
 
 **Projet :** SAÉ BUT2 S3 2026-2027
 **Thème :** Langages de programmation
-**Date :** 25 septembre 2026
 
 ---
 
