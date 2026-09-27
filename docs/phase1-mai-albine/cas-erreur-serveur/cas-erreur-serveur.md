@@ -4,7 +4,6 @@
 **Thème :** Langages de programmation
 **Responsables :** Mai + Albine
 **Partie :** Serveur C + Sockets
-**Date :** 26 septembre 2026
 
 ---
 
