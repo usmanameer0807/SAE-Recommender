@@ -1,0 +1,32 @@
+@startsalt
+{+
+  { + Creer une carte } | Recherche : | "                    " | [Q]
+  .
+  {
+    {+
+      [Logo]
+      Python
+      Paradigme : MULTI
+      Typage : DYNAMIC
+      Difficulte : BEGINNER
+      Annee : 1991
+      "15 recommandations"
+      .
+      [Recommander]
+      [Battle]
+    }
+    | {+
+      [Logo]
+      Java
+      Paradigme : OBJECT
+      Typage : STATIC
+      Difficulte : INTERMEDIATE
+      Annee : 1995
+      "11 recommandations"
+      .
+      [Recommander]
+      [Battle]
+    }
+  }
+}
+@endsalt

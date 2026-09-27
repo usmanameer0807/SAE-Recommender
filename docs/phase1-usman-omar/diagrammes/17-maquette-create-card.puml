@@ -1,0 +1,22 @@
+@startsalt
+{+
+  Creer une nouvelle carte langage
+  .
+  ---
+  Nom          : | "Python                    "
+  Paradigme    : | "Multi-paradigme      v    "
+  Typage       : | "Dynamique            v    "
+  Difficulte   : | "Debutant             v    "
+  Annee        : | "1991                      "
+  Image URL    : | "https://...               "
+  .
+  Description :
+  {+
+    "Langage interprete, polyvalent"
+    "et facile a apprendre."
+  }
+  .
+  ---
+  { [Creer] | [Annuler] }
+}
+@endsalt

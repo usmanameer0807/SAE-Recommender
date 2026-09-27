@@ -1,0 +1,26 @@
+@startuml
+
+title Sequence CLAIM_CARD
+
+actor "Utilisateur legitime" as U
+participant "CardController" as CC
+participant "NetworkClient" as NC
+participant "Serveur C" as SC
+
+U -> CC : clic Revendiquer
+CC -> NC : send CLAIM_CARD
+NC -> SC : {"action":"CLAIM_CARD"}
+
+SC -> SC : verifie user legitime
+SC -> SC : mine un bloc
+
+alt revendication acceptee
+    SC -> NC : {"status":"OK","action":"CARD_CLAIMED"}
+    NC -> CC : callback
+    CC -> U : Carte revendiquee
+else pas legitime
+    SC -> NC : {"status":"ERROR","code":"NOT_LEGITIMATE"}
+    NC -> CC : callback
+    CC -> U : Message d'erreur
+end
+@enduml
