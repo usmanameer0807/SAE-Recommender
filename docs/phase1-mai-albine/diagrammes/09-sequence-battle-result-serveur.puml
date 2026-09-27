@@ -1,0 +1,31 @@
+@startuml
+
+title Sequence BATTLE_RESULT - Cote serveur
+
+participant "Timer" as T
+participant "battle" as B
+participant "blockchain" as BC
+participant "db" as DB
+participant "PostgreSQL" as PG
+participant "Socket" as S
+participant "Autres clients" as AC
+
+T -> B : duree ecoulee (60s)
+B -> B : determine gagnant (plus de votes)
+B -> B : transfert 50% des recos
+B -> B : incremente winCount gagnant
+B -> B : si VA perdant = 0 -> INACTIVE
+B -> BC : mine_block("ACTION_BATTLE_RESULT")
+BC -> DB : save_block_to_db()
+DB -> PG : INSERT INTO blocks
+PG --> DB : OK
+
+B -> DB : UPDATE battles SET winner_id
+B -> DB : UPDATE cards SET value
+DB -> PG : UPDATE
+PG --> DB : OK
+DB --> B : OK
+
+B -> S : broadcast BATTLE_RESULT
+S -> AC : {"status":"NOTIFY","action":"BATTLE_RESULT"}
+@enduml
