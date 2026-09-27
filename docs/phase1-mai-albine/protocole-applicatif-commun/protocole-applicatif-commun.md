@@ -1,6 +1,5 @@
 # 📡 Protocole applicatif complet — SAE-Recommender
 
-**Version :** Définitive et exhaustive
 **Projet :** SAÉ BUT2 S3 2026-2027
 **Thème :** Langages de programmation
 
