@@ -1,11 +1,12 @@
-# 📄 Spécification technique — SAE-Recommender
+# Spécification technique — SAE-Recommender
 
-**Projet :** SAÉ BUT2 S3 2026-2027  
-**Thème :** Langages de programmation  
+> **SAÉ BUT2 S3 2026-2027**
+> Plateforme de recommandations fondée sur une blockchain privée simplifiée.
+> **Thème :** Langages de programmation
 
 ---
 
-## 📑 Table des matières
+## Table des matières
 
 1. [Introduction](#1-introduction)
 2. [Répartition des rôles](#2-répartition-des-rôles)
@@ -25,41 +26,43 @@
 
 ---
 
-# 1. Introduction
+## 1. Introduction
 
-## 1.1 Contexte
+### 1.1 Contexte
 
-Ce document constitue la spécification technique du projet **SAE-Recommender**, réalisé dans le cadre de la SAÉ du troisième semestre du BUT Informatique (2026-2027).
+Ce document constitue la spécification technique du projet SAE-Recommender, réalisé dans le cadre de la SAÉ du troisième semestre du BUT Informatique (2026-2027).
 
-## 1.2 Objectif du projet
+### 1.2 Objectif du projet
 
 L'objectif est de réaliser une plateforme client-serveur de recommandations structurée autour de cartes.
 
 La plateforme s'appuie sur :
 
-- Une communication par sockets TCP
-- Un serveur multitâche en C
-- Une blockchain privée simplifiée avec preuve de travail
-- Une sauvegarde en base PostgreSQL
-- Des tests unitaires
-- Une interface graphique JavaFX
+- une communication par sockets TCP ;
+- un serveur multitâche en C ;
+- une blockchain privée simplifiée avec preuve de travail ;
+- une sauvegarde en base PostgreSQL ;
+- des tests unitaires ;
+- une interface graphique JavaFX.
 
-## 1.3 Thème choisi
+### 1.3 Thème choisi
 
 Une carte représente un **langage de programmation**.
 
-### Justification
+**Justification :**
 
-- Cohérent avec la formation BUT Informatique
-- Objet concret et vérifiable
-- Facilite la description avec des critères objectifs
-- Permet des battles pertinentes (comparaison de langages)
-- Chaque langage possède un logo officiel
+- cohérent avec la formation BUT Informatique ;
+- objet concret et vérifiable ;
+- facilite la description avec des critères objectifs ;
+- permet des battles pertinentes (comparaison de langages) ;
+- chaque langage possède un logo officiel.
 
-## 1.4 Technologies utilisées
+**Exemples :** Python, Java, C, C++, Rust, JavaScript, TypeScript, Go, Ruby, Kotlin, Swift, Haskell, PHP, Scala, Elixir, Lua, R, SQL, Bash.
+
+### 1.4 Technologies utilisées
 
 | Technologie | Utilisation |
-|---|---|
+| --- | --- |
 | Linux Debian | Environnement de développement |
 | Langage C | Serveur + tests |
 | Langage Java | Client + tests |
@@ -71,67 +74,53 @@ Une carte représente un **langage de programmation**.
 
 ---
 
-# 2. Répartition des rôles
+## 2. Répartition des rôles
 
-## 2.1 Composition de l'équipe
+Voir le document complet : [`commun/repartition-roles.md`](commun/repartition-roles.md)
+
+### 2.1 Composition de l'équipe
 
 | Membre | Partie | Technologies |
-|---|---|---|
+| --- | --- | --- |
 | Usman | Client Java + JavaFX + Tests | Java, JavaFX, JUnit, Gson |
 | Omar | Client Java + JavaFX + Tests | Java, JavaFX, JUnit, Gson |
 | Mai | Serveur C + Sockets + Tests | C, pthreads, sockets |
 | Albine | Serveur C + Sockets + Tests | C, pthreads, sockets |
 | Iyore | Blockchain + PostgreSQL | C, SHA-256, PostgreSQL |
 
-## 2.2 Répartition des tâches Phase 1
+### 2.2 Répartition des tâches Phase 1
 
 | # | Tâche | Usman + Omar | Mai + Albine | Iyore |
-|---:|---|---|---|---|
-| 1 | Répartition des rôles | ✅ | ✅ | ✅ |
-| 2 | Architecture du serveur | 🟠 Aide | ✅ Principal | — |
-| 3 | Architecture des clients | ✅ Principal | — | — |
-| 4 | Organisation données serveur | 🟠 Aide | ✅ Principal | 🟠 Aide |
-| 5 | Organisation données client | ✅ Principal | — | 🟠 Validation |
-| 6 | Schéma relationnel BDD | — | 🟠 Aide | ✅ Principal |
-| 7 | Structures blockchain | — | 🟠 Aide | ✅ Principal |
-| 8 | Données cartes/recos/battles | ✅ | ✅ | ✅ |
-| 9 | Règles métier | ✅ | ✅ | ✅ |
-| 10 | Diagrammes de séquence | ✅ Client | ✅ Serveur | 🟠 BDD |
-| 11 | Protocole applicatif | ✅ Rédaction | ✅ Validation | — |
-| 12 | Cas d'erreur | ✅ Client | ✅ Serveur | 🟠 BDD |
-
-### Légende
-
-- ✅ **Principal** : responsable
-- 🟠 **Aide / Validation** : participe
+| --- | --- | --- | --- | --- |
+| 1 | Répartition des rôles | ✓ | ✓ | ✓ |
+| 2 | Architecture du serveur | Aide | Principal | — |
+| 3 | Architecture des clients | Principal | — | — |
+| 4 | Organisation données serveur | Aide | Principal | Aide |
+| 5 | Organisation données client | Principal | — | Validation |
+| 6 | Schéma relationnel BDD | — | Aide | Principal |
+| 7 | Structures blockchain | — | Aide | Principal |
+| 8 | Données cartes/recos/battles | ✓ | ✓ | ✓ |
+| 9 | Règles métier | ✓ | ✓ | ✓ |
+| 10 | Diagrammes de séquence | Client | Serveur | BDD |
+| 11 | Protocole applicatif | Rédaction | Validation | — |
+| 12 | Cas d'erreur | Client | Serveur | BDD |
 
 ---
 
-# 3. Architecture du serveur
+## 3. Architecture du serveur
 
-## 3.1 Vue d'ensemble
+Voir le document complet : [`serveur/architecture-serveur.md`](serveur/architecture-serveur.md)
+
+### 3.1 Vue d'ensemble
 
 Le serveur C est structuré en modules pour séparer les responsabilités.
 
-```mermaid
-graph TD
-    A[main.c Boucle principale] --> B[network.c Socket]
-    B --> C[client_handler.c 1 thread/client]
-    C --> D[protocol.c Parse JSON]
-    D --> E[carte.c]
-    D --> F[battle.c]
-    D --> G[legitimation.c]
-    E --> H[blockchain.c SHA-256]
-    F --> H
-    G --> H
-    H --> I[db.c PostgreSQL]
-    I --> J[(PostgreSQL)]
-```
+![Architecture serveur](src/diagrammes-serveur/01-architecture-serveur.png)
 
-## 3.2 Modules du serveur
+### 3.2 Modules du serveur
 
 | Module | Fichier source | En-tête | Rôle |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Boucle principale | `main.c` | — | Démarrage, arrêt |
 | Réseau | `network.c` | `network.h` | Socket, bind, listen, accept |
 | Client | `client_handler.c` | `client_handler.h` | 1 thread par client |
@@ -143,17 +132,17 @@ graph TD
 | Protocole | `protocol.c` | `protocol.h` | Parse JSON, réponse JSON |
 | Utilitaires | `utils.c` | `utils.h` | Fonctions communes |
 
-## 3.3 Modèle de concurrence
+### 3.3 Modèle de concurrence
 
-Le serveur utilise un modèle **multithread (`pthreads`)** plutôt qu'un modèle multiprocessus (`fork`).
+Le serveur utilise un modèle **multithread (pthreads)** plutôt qu'un modèle multiprocessus (`fork`).
 
-### Justification
+**Justification :**
 
-- Besoin de partager en mémoire la blockchain et les listes de cartes
-- Les threads d'un même processus partagent naturellement le même espace mémoire
-- Évite la complexité de la mémoire partagée inter-processus
+- besoin de partager en mémoire la blockchain et les listes de cartes ;
+- les threads d'un même processus partagent naturellement le même espace mémoire ;
+- évite la complexité de la mémoire partagée inter-processus.
 
-## 3.4 Boucle principale
+### 3.4 Boucle principale
 
 1. Création du socket
 2. `bind()` sur l'adresse IP et le port
@@ -163,26 +152,26 @@ Le serveur utilise un modèle **multithread (`pthreads`)** plutôt qu'un modèle
 6. Création d'un thread par client (`pthread_create`)
 7. Le serveur retourne immédiatement à `accept()`
 
-## 3.5 Traitement non bloquant
+### 3.5 Traitement non bloquant
 
 Chaque thread client est indépendant :
 
-- Un calcul long (minage) ne bloque pas les autres clients
-- La boucle principale accepte rapidement les nouvelles connexions
-- Le serveur reste réactif
+- un calcul long (minage) ne bloque pas les autres clients ;
+- la boucle principale accepte rapidement les nouvelles connexions ;
+- le serveur reste réactif.
 
-## 3.6 Limite de connexions
+### 3.6 Limite de connexions
 
-- `MAX_CLIENTS = 10` clients simultanés
-- Au-delà, la connexion est acceptée puis rejetée avec un message d'erreur
+- `MAX_CLIENTS = 10` clients simultanés.
+- Au-delà, la connexion est acceptée puis rejetée avec un message d'erreur.
 - Message : `{"status":"ERROR","code":"SERVER_BUSY"}`
 
-## 3.7 Synchronisation
+### 3.7 Synchronisation
 
 Les structures partagées sont protégées par des mutex :
 
 | Structure | Mutex | Protection |
-|---|---|---|
+| --- | --- | --- |
 | Liste cartes | `mutex_cartes` | Lecture/écriture |
 | Liste utilisateurs | `mutex_utilisateurs` | Lecture/écriture |
 | Liste battles | `mutex_battles` | Lecture/écriture |
@@ -192,35 +181,30 @@ Les structures partagées sont protégées par des mutex :
 
 ---
 
-# 4. Architecture des clients
+## 4. Architecture des clients
 
-## 4.1 Vue d'ensemble
+Voir le document complet : [`client/architecture-client.md`](client/architecture-client.md)
 
-Le client Java est structuré en **5 couches**.
+### 4.1 Vue d'ensemble
 
-```mermaid
-graph TD
-    A[Couche 1 Vue FXML + CSS] --> B[Couche 2 Controleurs Java]
-    B --> C[Couche 3 Réseau Socket TCP]
-    C --> D[Couche 4 Modele POJO]
-    D --> E[Couche 5 Serialisation Gson]
-    C --> F[Serveur C]
-```
+Le client Java est structuré en 5 couches.
 
-## 4.2 Rôle de chaque couche
+![Architecture client](src/diagrammes-client/00-architecture-client.png)
+
+### 4.2 Rôle de chaque couche
 
 | Couche | Technologie | Rôle | Contrainte |
-|---|---|---|---|
-| 1 — Vue | JavaFX, FXML, CSS | Afficher les écrans, capturer les clics | Aucune logique métier |
-| 2 — Contrôleurs | Java, JavaFX | Lire les champs, appeler NetworkClient, MAJ UI | Utiliser `Platform.runLater()` |
-| 3 — Réseau | `java.net.Socket` | Ouvrir le socket, envoyer, écouter | Thread séparé pour `listenLoop` |
-| 4 — Modèle | POJO Java | Représenter les données | Sérialisables en JSON |
-| 5 — Sérialisation | Gson | Convertir objet Java ↔ JSON | Noms de champs identiques |
+| --- | --- | --- | --- |
+| 1 - Vue | JavaFX, FXML, CSS | Afficher les écrans, capturer les clics | Aucune logique métier |
+| 2 - Contrôleurs | Java, JavaFX | Lire les champs, appeler `NetworkClient`, MAJ UI | Utiliser `Platform.runLater()` |
+| 3 - Réseau | `java.net.Socket` | Ouvrir le socket, envoyer, écouter | Thread séparé pour `listenLoop` |
+| 4 - Modèle | POJO Java | Représenter les données | Sérialisables en JSON |
+| 5 - Sérialisation | Gson | Convertir objet Java ↔ JSON | Noms de champs identiques |
 
-## 4.3 Liste des fichiers FXML
+### 4.3 Liste des fichiers FXML
 
 | Fichier | Écran | Contrôleur |
-|---|---|---|
+| --- | --- | --- |
 | `login.fxml` | Connexion | `LoginController` |
 | `main.fxml` | Fenêtre principale | `MainController` |
 | `cards.fxml` | Onglet Cartes | `CardController` |
@@ -233,11 +217,11 @@ graph TD
 
 ---
 
-# 5. Organisation des données côté serveur
+## 5. Organisation des données côté serveur
 
-## 5.1 Structures C
+Voir le document complet : [`serveur/donnees-serveur.md`](serveur/donnees-serveur.md)
 
-### Carte
+### 5.1 Structures C
 
 ```c
 typedef struct {
@@ -257,11 +241,7 @@ typedef struct {
     int win_count;
     long created_at;
 } Carte;
-```
 
-### Utilisateur
-
-```c
 typedef struct {
     int id;
     char username[50];
@@ -271,11 +251,7 @@ typedef struct {
     int reco_count;
     int legitimacy_count;
 } Utilisateur;
-```
 
-### Recommandation
-
-```c
 typedef struct {
     int id;
     int user_id;
@@ -283,14 +259,10 @@ typedef struct {
     int active;
     long timestamp;
 } Recommandation;
-```
 
-### Battle
-
-```c
 typedef struct {
     int id;
-    int card1_id;
+    int card_id;
     int card2_id;
     int winner_id;
     int status;
@@ -299,11 +271,7 @@ typedef struct {
     long started_at;
     long ended_at;
 } Battle;
-```
 
-### Vote
-
-```c
 typedef struct {
     int id;
     int battle_id;
@@ -311,74 +279,70 @@ typedef struct {
     int card_id;
     int weight;
 } Vote;
-```
 
-### ActionCarte
-
-```c
 typedef struct {
     int id;
     int card_id;
     int user_id;
-    int type;         /* 0=legitimation, 1=revendication, 2=authentification */
-    int status;       /* 0=en attente, 1=acceptee, 2=refusee */
+    int type;   /* 0=legitimation, 1=revendication, 2=authentification */
+    int status; /* 0=en attente, 1=acceptee, 2=refusee */
     long requested_at;
     long granted_at;
 } ActionCarte;
 ```
 
-## 5.2 Conteneurs globaux
+### 5.2 Conteneurs globaux
 
 ```c
-Carte *liste_cartes;
-int nb_cartes;
+Carte *liste_cartes = NULL;
+int nb_cartes = 0;
 
-Utilisateur *liste_utilisateurs;
-int nb_utilisateurs;
+Utilisateur *liste_utilisateurs = NULL;
+int nb_utilisateurs = 0;
 
-Battle *liste_battles;
-int nb_battles;
+Battle *liste_battles = NULL;
+int nb_battles = 0;
+
+Blockchain blockchain;
 ```
 
-Chaque liste est protégée par son propre mutex.
+### 5.3 Lien avec la blockchain
 
-## 5.3 Lien avec la blockchain
+Les structures en mémoire sont **dérivées** de la blockchain :
 
-Les structures en mémoire sont dérivées de la blockchain :
-
-- Jamais source de vérité définitive
-- Reconstruction optimisée pour un accès rapide
-- Toute modification validée → d'abord dans un bloc, puis en mémoire
+- jamais source de vérité définitive ;
+- reconstruction optimisée pour un accès rapide ;
+- toute modification validée → d'abord dans un bloc, puis en mémoire.
 
 ---
 
-# 6. Organisation des données côté client
+## 6. Organisation des données côté client
 
-## 6.1 Vue d'ensemble
+Voir le document complet : [`client/donnees-client.md`](client/donnees-client.md)
 
-Le client organise ses données en **3 catégories**.
+### 6.1 Vue d'ensemble
 
 | Catégorie | Classes | Rôle |
-|---|---|---|
-| Modèle métier | `Card`, `User`, `Recommendation`, `Battle`, `Vote`, `Legitimacy` | Représenter les objets |
+| --- | --- | --- |
+| Modèle métier | `Card`, `User`, `Recommendation`, `Battle`, `Vote`, `Legitimacy`, `Notification` | Représenter les objets |
 | Communication | `Request`, `Response` | Encapsuler les messages JSON |
 | Réseau | `NetworkClient` | Gérer le socket TCP |
 
-## 6.2 Classe Card
+### 6.2 Classe Card
 
 | Champ | Type | Description |
-|---|---|---|
+| --- | --- | --- |
 | `id` | String | Identifiant (`c_001`) |
 | `title` | String | Nom du langage |
-| `paradigm` | String | OBJECT, FUNCTIONAL, MULTI… |
+| `paradigm` | String | `OBJECT`, `FUNCTIONAL`, `MULTI`… |
 | `description` | String | Description |
-| `typing` | String | STATIC, DYNAMIC… |
-| `difficulty` | String | BEGINNER, INTERMEDIATE… |
+| `typing` | String | `STATIC`, `DYNAMIC`… |
+| `difficulty` | String | `BEGINNER`, `INTERMEDIATE`… |
 | `yearCreated` | int | Année de création |
 | `imageUrl` | String | URL du logo |
 | `creator` | String | Créateur (`u_001`) |
 | `owner` | String | Propriétaire courant |
-| `status` | String | ACTIVE ou INACTIVE |
+| `status` | String | `ACTIVE` ou `INACTIVE` |
 | `value` | int | Nombre de recos (VA) |
 | `isAuthenticated` | boolean | Authentifiée ? |
 | `authenticatedBy` | String | Qui a authentifié |
@@ -388,81 +352,36 @@ Le client organise ses données en **3 catégories**.
 | `stakeVA` | int | VA engagée |
 | `createdAt` | String | Date (ISO 8601) |
 
-## 6.3 Classe User
-
-| Champ | Type | Description |
-|---|---|---|
-| `id` | String | Identifiant (`u_001`) |
-| `username` | String | Pseudo |
-| `isBot` | boolean | Est-ce un bot ? |
-| `recoCount` | int | Recos émises |
-| `legitimacyCount` | int | Légitimations obtenues |
-
-## 6.4 Classe Battle
-
-| Champ | Type | Description |
-|---|---|---|
-| `id` | String | Identifiant (`b_001`) |
-| `card1Id` | String | Carte 1 |
-| `card2Id` | String | Carte 2 |
-| `card1VA` | int | VA carte 1 |
-| `card2VA` | int | VA carte 2 |
-| `card1Votes` | int | Votes pondérés carte 1 |
-| `card2Votes` | int | Votes pondérés carte 2 |
-| `duration` | int | Durée (60 secondes) |
-| `endTime` | String | Heure de fin |
-| `status` | String | EN_COURS, TERMINEE |
-| `winnerId` | String | Gagnant |
-
-## 6.5 Classe Vote
-
-| Champ | Type | Description |
-|---|---|---|
-| `battleId` | String | Battle concernée |
-| `userId` | String | Votant |
-| `cardId` | String | Carte choisie |
-| `weight` | int | Poids du vote |
-| `signature` | String | Signature SHA-256 |
-| `votedAt` | String | Date du vote |
-
-## 6.6 Classe Legitimacy
-
-| Champ | Type | Description |
-|---|---|---|
-| `id` | String | Identifiant |
-| `cardId` | String | Carte concernée |
-| `userId` | String | Utilisateur |
-| `status` | String | PENDING, GRANTED, REJECTED |
-| `requestedAt` | String | Date de demande |
-| `grantedAt` | String | Date d'accord |
-
-## 6.7 Classes Request / Response
-
-```java
-Request  : { action, payload }
-Response : { status, action, data, code, message }
-```
-
-## 6.8 Stockage côté client
+### 6.3 Stockage côté client
 
 Le client ne stocke rien de manière permanente :
 
-- Données en mémoire (`ObservableList` JavaFX)
-- Rechargement à chaque connexion (`CONTEXT_RESTORED`)
-- Aucun accès à la base de données
+- données en mémoire (`ObservableList` JavaFX) ;
+- rechargement à chaque connexion (`CONTEXT_RESTORED`) ;
+- aucun accès à la base de données.
 
 ---
 
-# 7. Schéma relationnel de la base de données
+## 7. Schéma relationnel de la base de données
 
-## 7.1 Vue d'ensemble
+Voir le document complet : [`blockchain-bdd/schema-bdd.md`](blockchain-bdd/schema-bdd.md)
 
-La base PostgreSQL contient **7 tables**.
+### 7.1 Vue d'ensemble
 
-## 7.2 Table `users`
+La base PostgreSQL contient **7 tables** :
+
+1. `users`
+2. `cards`
+3. `recommendations`
+4. `battles`
+5. `votes`
+6. `legitimacies`
+7. `blocks`
+
+### 7.2 Table `users`
 
 | Champ | Type | Contrainte |
-|---|---|---|
+| --- | --- | --- |
 | `id` | SERIAL | PRIMARY KEY |
 | `username` | VARCHAR(50) | UNIQUE, NOT NULL |
 | `is_bot` | BOOLEAN | DEFAULT FALSE |
@@ -470,10 +389,10 @@ La base PostgreSQL contient **7 tables**.
 | `legitimacy_count` | INT | DEFAULT 0 |
 | `created_at` | TIMESTAMP | DEFAULT NOW() |
 
-## 7.3 Table `cards`
+### 7.3 Table `cards`
 
 | Champ | Type | Contrainte |
-|---|---|---|
+| --- | --- | --- |
 | `id` | SERIAL | PRIMARY KEY |
 | `title` | VARCHAR(100) | NOT NULL |
 | `paradigm` | VARCHAR(30) | NOT NULL |
@@ -482,78 +401,81 @@ La base PostgreSQL contient **7 tables**.
 | `difficulty` | VARCHAR(20) | |
 | `year_created` | INT | |
 | `image_url` | VARCHAR(500) | |
-| `creator_id` | INT | REFERENCES `users(id)` |
-| `owner_id` | INT | REFERENCES `users(id)` |
+| `creator_id` | INT | REFERENCES users(id) |
+| `owner_id` | INT | REFERENCES users(id) |
 | `status` | VARCHAR(20) | DEFAULT 'ACTIVE' |
 | `value` | INT | DEFAULT 0 |
 | `is_authenticated` | BOOLEAN | DEFAULT FALSE |
-| `authenticated_by` | INT | REFERENCES `users(id)` |
+| `authenticated_by` | INT | REFERENCES users(id) |
 | `win_count` | INT | DEFAULT 0 |
 | `is_legitimate` | BOOLEAN | DEFAULT FALSE |
 | `stake_va` | INT | DEFAULT 0 |
 | `created_at` | TIMESTAMP | DEFAULT NOW() |
 
-## 7.4 Table `recommendations`
+### 7.4 Table `recommendations`
 
 | Champ | Type | Contrainte |
-|---|---|---|
+| --- | --- | --- |
 | `id` | SERIAL | PRIMARY KEY |
-| `card_id` | INT | REFERENCES `cards(id)` |
-| `user_id` | INT | REFERENCES `users(id)` |
+| `card_id` | INT | REFERENCES cards(id) |
+| `user_id` | INT | REFERENCES users(id) |
 | `active` | BOOLEAN | DEFAULT TRUE |
 | `created_at` | TIMESTAMP | DEFAULT NOW() |
 
-## 7.5 Table `battles`
+### 7.5 Table `battles`
 
 | Champ | Type | Contrainte |
-|---|---|---|
+| --- | --- | --- |
 | `id` | SERIAL | PRIMARY KEY |
-| `card1_id` | INT | REFERENCES `cards(id)` |
-| `card2_id` | INT | REFERENCES `cards(id)` |
+| `card1_id` | INT | REFERENCES cards(id) |
+| `card2_id` | INT | REFERENCES cards(id) |
 | `winner_id` | INT | |
 | `status` | VARCHAR(20) | |
 | `started_at` | TIMESTAMP | |
 | `ended_at` | TIMESTAMP | |
 
-## 7.6 Table `votes`
+### 7.6 Table `votes`
 
 | Champ | Type | Contrainte |
-|---|---|---|
+| --- | --- | --- |
 | `id` | SERIAL | PRIMARY KEY |
-| `battle_id` | INT | REFERENCES `battles(id)` |
-| `user_id` | INT | REFERENCES `users(id)` |
-| `card_id` | INT | REFERENCES `cards(id)` |
+| `battle_id` | INT | REFERENCES battles(id) |
+| `user_id` | INT | REFERENCES users(id) |
+| `card_id` | INT | REFERENCES cards(id) |
 | `weight` | INT | DEFAULT 1 |
 | `signature` | VARCHAR(256) | |
 | `voted_at` | TIMESTAMP | DEFAULT NOW() |
 
-## 7.7 Table `legitimacies`
+### 7.7 Table `legitimacies`
 
 | Champ | Type | Contrainte |
-|---|---|---|
+| --- | --- | --- |
 | `id` | SERIAL | PRIMARY KEY |
-| `card_id` | INT | REFERENCES `cards(id)` |
-| `user_id` | INT | REFERENCES `users(id)` |
+| `card_id` | INT | REFERENCES cards(id) |
+| `user_id` | INT | REFERENCES users(id) |
 | `status` | VARCHAR(20) | |
 | `requested_at` | TIMESTAMP | |
 | `granted_at` | TIMESTAMP | |
 
-## 7.8 Table `blocks`
+### 7.8 Table `blocks`
 
 | Champ | Type | Contrainte |
-|---|---|---|
+| --- | --- | --- |
 | `id` | SERIAL | PRIMARY KEY |
 | `timestamp` | BIGINT | NOT NULL |
 | `data` | JSONB | NOT NULL |
 | `prev_hash` | CHAR(64) | |
 | `nonce` | BIGINT | |
 | `hash` | CHAR(64) | |
+| `created_at` | TIMESTAMP | DEFAULT NOW() |
 
 ---
 
-# 8. Structures de données de la blockchain
+## 8. Structures de données de la blockchain
 
-## 8.1 Structure d'un bloc
+Voir le document complet : [`blockchain-bdd/structures-blockchain.md`](blockchain-bdd/structures-blockchain.md)
+
+### 8.1 Structure d'un bloc
 
 ```c
 typedef struct {
@@ -567,7 +489,7 @@ typedef struct {
 ```
 
 | Champ | Type | Description |
-|---|---|---|
+| --- | --- | --- |
 | `id` | int | Identifiant unique |
 | `timestamp` | long | Date de création (epoch) |
 | `data` | char[1024] | Données de l'action (JSON) |
@@ -575,44 +497,41 @@ typedef struct {
 | `nonce` | int | Preuve de travail |
 | `hash` | char[65] | Hash courant |
 
-## 8.2 Bloc genesis
-
-Le premier bloc de la blockchain :
+### 8.2 Bloc genesis
 
 - `id = 0`
-- `prev_hash = "0000000000000000000000000000000000000000000000000000000000000000"`
+- `prev_hash` = 64 zéros (`"0000…0000"`)
 - `nonce = 0`
+- `data = "GENESIS"`
 - `hash = SHA-256(data + prev_hash + nonce)`
 
-## 8.3 Calcul du hash
+### 8.3 Calcul du hash
 
-```text
+```
 hash = SHA-256(data + prev_hash + nonce)
 ```
 
-- **Algorithme :** SHA-256
-- **Sortie :** 64 caractères hexadécimaux
+- Algorithme : SHA-256
+- Sortie : 64 caractères hexadécimaux
 
-## 8.4 Preuve de travail (PoW)
+### 8.4 Preuve de travail (PoW)
 
 Le minage consiste à faire varier le nonce jusqu'à obtenir un hash respectant un motif.
 
-- **Motif :** N zéros au début du hash
-- **Difficulté :** 3 ou 4
+- Motif : N zéros au début du hash
+- Difficulté : 3 ou 4
 
 Exemple pour difficulté = 3 :
 
-```text
-000abc123...  ✅ Valide
-00abc1234...  ❌ Invalide
-```
+- `000abc123...` → valide
+- `00abc1234...` → invalide
 
-## 8.5 Vérification de la cohérence
+### 8.5 Vérification de la cohérence
 
 La fonction `verify_blockchain()` contrôle :
 
 | # | Contrôle | Description |
-|---:|---|---|
+| --- | --- | --- |
 | 1 | Validité du hash | `hash == SHA-256(data + prev_hash + nonce)` |
 | 2 | Cohérence du `prev_hash` | `block[i].prev_hash == block[i-1].hash` |
 | 3 | Preuve de travail | Le hash commence par N zéros |
@@ -620,58 +539,60 @@ La fonction `verify_blockchain()` contrôle :
 
 ---
 
-# 9. Données associées
+## 9. Données associées
 
-## 9.1 Carte (langage)
+Voir le document complet : [`commun/regles-metier.md`](commun/regles-metier.md)
+
+### 9.1 Carte (langage)
 
 | Donnée | Type | Règle |
-|---|---|---|
+| --- | --- | --- |
 | `id` | String | Généré serveur |
 | `title` | String | 1-100 caractères |
-| `paradigm` | Enum | OBJECT, FUNCTIONAL, MULTI… |
+| `paradigm` | Enum | `OBJECT`, `FUNCTIONAL`, `MULTI`… |
 | `description` | String | 1-500 caractères |
-| `typing` | Enum | STATIC, DYNAMIC… |
-| `difficulty` | Enum | BEGINNER, INTERMEDIATE… |
+| `typing` | Enum | `STATIC`, `DYNAMIC`… |
+| `difficulty` | Enum | `BEGINNER`, `INTERMEDIATE`… |
 | `yearCreated` | int | 1950-2030 |
 | `imageUrl` | String | URL valide |
 | `creator` | String | `u_XXX` |
 | `owner` | String | `u_XXX` |
-| `status` | Enum | ACTIVE, INACTIVE |
+| `status` | Enum | `ACTIVE`, `INACTIVE` |
 | `value` | int | Nombre de recos |
-| `isAuthenticated` | boolean | false par défaut |
+| `isAuthenticated` | boolean | `false` par défaut |
 | `winCount` | int | 0 par défaut |
-| `isLegitimate` | boolean | false par défaut |
+| `isLegitimate` | boolean | `false` par défaut |
 | `stakeVA` | int | 0 par défaut |
 | `createdAt` | String | ISO 8601 |
 
-## 9.2 Recommandation
+### 9.2 Recommandation
 
 | Donnée | Type | Règle |
-|---|---|---|
+| --- | --- | --- |
 | `cardId` | String | `c_XXX` |
 | `userId` | String | `u_XXX` |
 | `date` | String | ISO 8601 |
-| `active` | boolean | true |
+| `active` | boolean | `true` |
 
 **Impact :** +1 VA sur la carte.
 
-## 9.3 Battle
+### 9.3 Battle
 
 | Donnée | Type | Règle |
-|---|---|---|
+| --- | --- | --- |
 | `id` | String | `b_XXX` |
 | `card1Id` | String | `c_XXX` |
 | `card2Id` | String | `c_XXX` |
 | `card1Votes` | int | Poids cumulés |
 | `card2Votes` | int | Poids cumulés |
 | `duration` | int | 60 secondes |
-| `status` | String | EN_COURS, TERMINEE |
+| `status` | String | `EN_COURS`, `TERMINEE` |
 | `winnerId` | String | `c_XXX` |
 
-## 9.4 Vote
+### 9.4 Vote
 
 | Donnée | Type | Règle |
-|---|---|---|
+| --- | --- | --- |
 | `battleId` | String | `b_XXX` |
 | `userId` | String | `u_XXX` |
 | `cardId` | String | `c_XXX` |
@@ -679,303 +600,307 @@ La fonction `verify_blockchain()` contrôle :
 | `signature` | String | SHA-256 |
 | `votedAt` | String | ISO 8601 |
 
-## 9.5 Légitimation
+### 9.5 Légitimation
 
 | Donnée | Type | Règle |
-|---|---|---|
+| --- | --- | --- |
 | `id` | String | `l_XXX` |
 | `cardId` | String | `c_XXX` |
 | `userId` | String | `u_XXX` |
-| `status` | String | PENDING, GRANTED, REJECTED |
+| `status` | String | `PENDING`, `GRANTED`, `REJECTED` |
 | `requestedAt` | String | ISO 8601 |
 | `grantedAt` | String | ISO 8601 |
 
-## 9.6 Revendication
+### 9.6 Revendication
 
 | Donnée | Type | Règle |
-|---|---|---|
+| --- | --- | --- |
 | `id` | String | `l_XXX` |
 | `cardId` | String | `c_XXX` |
 | `userId` | String | `u_XXX` |
-| `status` | String | PENDING, GRANTED, REJECTED |
+| `status` | String | `PENDING`, `GRANTED`, `REJECTED` |
 | `requestedAt` | String | ISO 8601 |
 
-## 9.7 Authentification
+### 9.7 Authentification
 
 | Donnée | Type | Règle |
-|---|---|---|
+| --- | --- | --- |
 | `cardId` | String | `c_XXX` |
 | `authenticatedBy` | String | `u_XXX` |
 | `authenticatedAt` | String | ISO 8601 |
 
 **Impact :** +10 VA + statut `AUTHENTIFIED`.
 
-## 9.8 Partage ciblé (optionnel)
-
-| Donnée | Type | Règle |
-|---|---|---|
-| `sharedBy` | String | `u_XXX` |
-| `sharedTo` | String | `u_XXX` |
-| `sharedAt` | String | ISO 8601 |
-| `accepted` | boolean | null |
-
 ---
 
-# 10. Règles métier
+## 10. Règles métier
 
-## 10.1 Valeur d'une carte (VA)
+Voir le document complet : [`commun/regles-metier.md`](commun/regles-metier.md)
+
+### 10.1 Valeur d'une carte (VA)
 
 | Action | Impact |
-|---|---|
+| --- | --- |
 | 1 reco active | +1 VA |
 | 1 authentification | +10 VA |
 | Victoire en battle | +50 % des recos du perdant |
-| Défaite en battle | -50 % des recos |
+| Défaite en battle | −50 % des recos |
 
-### Formule
+**Formule :**
 
-```text
-VA = nb_recos_actives + (10 × auth) + transferts_battle
+```
+VA = nb_recos_actives + (10 × auth) + transfers_battle
 ```
 
-## 10.2 Valeur d'un utilisateur
+### 10.2 Valeur d'un utilisateur
 
-```text
+```
 VA(user) = Σ VA(cartes possédées)
 ```
 
-## 10.3 Critère de proximité (battle)
+### 10.3 Critère de proximité (battle)
 
-Deux cartes peuvent se battre si elles ont le **même paradigm**.
+Deux cartes peuvent se battre si elles ont le **même `paradigm`**.
 
-## 10.4 Légitimation
+### 10.4 Légitimation
 
 | Condition | Détail |
-|---|---|
+| --- | --- |
 | Seuil | 5 recos valides |
 | Alternative | Validation du créateur |
 | Droits | Authentifier + Revendiquer |
 
-## 10.5 Battle
+### 10.5 Battle
 
 | Règle | Valeur |
-|---|---|
+| --- | --- |
 | Nombre de cartes | 2 |
-| Statut | ACTIVE |
+| Statut | `ACTIVE` |
 | Paradigme | Identique |
 | VA minimum | 5 |
 | Durée | 60 secondes |
-| Vote | 1 par user |
+| Vote | 1 par utilisateur |
 | Pondération | Nb recos (min 1) |
-| Égalité | VA la plus élevée |
+| Égalité | VA la plus élevée l'emporte |
 | Transfert | 50 % des recos |
-| Carte perdante | INACTIVE si VA = 0 |
+| Carte perdante | `INACTIVE` si VA = 0 |
 
-## 10.6 Authentification
+### 10.6 Authentification
 
 | Règle | Valeur |
-|---|---|
-| Acteur | Légitime |
+| --- | --- |
+| Acteur | Utilisateur légitime |
 | Impact | +10 VA |
-| Statut | AUTHENTIFIED |
+| Statut | `AUTHENTIFIED` |
 | Effet | Verrouillage |
 
-## 10.7 Revendication
+### 10.7 Revendication
 
 | Règle | Valeur |
-|---|---|
+| --- | --- |
 | Demandeur | Légitime |
 | Cible | Non-légitime |
 | Délai | 10 blocs |
 
-## 10.8 Cycle de vie
+### 10.8 Cycle de vie
 
-```mermaid
-stateDiagram-v2
-    [*] --> ACTIVE : CREATE_CARD
-    ACTIVE --> ACTIVE : RECOMMEND
-    ACTIVE --> AUTHENTIFIED : AUTHENTICATE
-    ACTIVE --> INACTIVE : VA = 0
-    AUTHENTIFIED --> INACTIVE : VA = 0
-    INACTIVE --> ACTIVE : REACTIVATION
+```
+[*] → CREATE_CARD → ACTIVE
+ACTIVE → RECOMMEND → ACTIVE
+ACTIVE → AUTHENTICATE → AUTHENTIFIED
+ACTIVE → START_BATTLE → IN_BATTLE
+IN_BATTLE → VICTOIRE → ACTIVE
+IN_BATTLE → DÉFAITE → INACTIVE (si VA = 0)
+INACTIVE → RÉACTIVATION → ACTIVE
 ```
 
-**Document complet :** `regles-metier.md`
+---
+
+## 11. Diagrammes de séquence
+
+Voir les annexes : [Annexe D — Séquences](annexes/annexe-d-sequences.md)
+
+### 11.1 Scénarios principaux
+
+| # | Scénario | Diagramme |
+| --- | --- | --- |
+| 1 | LOGIN | `src/diagrammes-serveur/03-sequence-login-serveur.png` |
+| 2 | CREATE_CARD | `src/diagrammes-serveur/04-sequence-create-card-serveur.png` |
+| 3 | RECOMMEND | `src/diagrammes-serveur/05-sequence-recommend-serveur.png` |
+| 4 | BATTLE | `src/diagrammes-serveur/07-sequence-battle-serveur.png` |
+| 5 | LÉGITIMATION | `src/diagrammes-serveur/10-sequence-legitimation-serveur.png` |
+| 6 | AUTHENTIFICATION | `src/diagrammes-serveur/11-sequence-authentification-serveur.png` |
+| 7 | REVENDICATION | `src/diagrammes-client/11-sequence-revendication.png` |
+| 8 | DISCONNECT | `src/diagrammes-serveur/12-sequence-disconnect-serveur.png` |
 
 ---
 
-# 11. Diagrammes de séquence
+## 12. Protocole applicatif
 
-## 11.1 LOGIN
+Voir le document complet : [`commun/protocole-applicatif-commun.md`](commun/protocole-applicatif-commun.md)
 
-`diagrammes/07-seq-login.png`
-
-## 11.2 CREATE_CARD
-
-`diagrammes/08-seq-create-card.png`
-
-## 11.3 RECOMMEND
-
-`diagrammes/09-seq-recommend.png`
-
-## 11.4 BATTLE
-
-`diagrammes/10-seq-battle.png`
-
-## 11.5 LÉGITIMATION
-
-`diagrammes/11-seq-legitimation.png`
-
-## 11.6 AUTHENTIFICATION
-
-`diagrammes/12-seq-authentification.png`
-
-## 11.7 REVENDICATION
-
-`diagrammes/13-seq-revendication.png`
-
-## 11.8 DISCONNECT
-
-`diagrammes/14-seq-disconnect.png`
-
----
-
-# 12. Protocole applicatif
-
-## 12.1 Format général
+### 12.1 Format général
 
 | Élément | Valeur |
-|---|---|
+| --- | --- |
 | Format | JSON |
 | Encodage | UTF-8 |
 | Délimiteur | `\n` |
 | Transport | Socket TCP |
 
-## 12.2 Structure
+### 12.2 Structure des messages
 
-### Requête
+**Requête :**
 
 ```json
 {"action":"LOGIN","payload":{"username":"usman"}}
 ```
 
-### Réponse OK
+**Réponse OK :**
 
 ```json
-{"status":"OK","action":"LOGIN_SUCCESS","data":{...}}
+{"status":"OK","action":"LOGIN_SUCCESS","data":{"userId":"u_001"}}
 ```
 
-### Réponse ERROR
+**Réponse ERROR :**
 
 ```json
-{"status":"ERROR","code":"USERNAME_TAKEN","message":"..."}
+{"status":"ERROR","code":"USERNAME_TAKEN","message":"Ce pseudo est deja utilise."}
 ```
 
-### Notification
+**Notification :**
 
 ```json
-{"status":"NOTIFY","action":"CARD_UPDATED","data":{...}}
+{"status":"NOTIFY","action":"CARD_UPDATED","data":{"cardId":"c_001","value":13}}
 ```
 
-## 12.3 Liste des actions
+### 12.3 Liste des actions
 
 | # | Action | Description |
-|---:|---|---|
+| --- | --- | --- |
 | 1 | `LOGIN` | Connexion |
 | 2 | `GET_CONTEXT` | Récupérer le contexte |
 | 3 | `CREATE_CARD` | Créer une carte |
 | 4 | `RECOMMEND` | Recommander |
 | 5 | `REPUDIATE` | Répudier |
-| 6 | `START_BATTLE` | Lancer battle |
+| 6 | `START_BATTLE` | Lancer une battle |
 | 7 | `VOTE_BATTLE` | Voter |
-| 8 | `REQUEST_LEGITIMACY` | Demander légitimation |
+| 8 | `REQUEST_LEGITIMACY` | Demander la légitimation |
 | 9 | `CLAIM_CARD` | Revendiquer |
 | 10 | `AUTHENTICATE_CARD` | Authentifier |
 | 11 | `DISCONNECT` | Déconnexion |
 
-**Document complet :** `protocole-applicatif.md`
+### 12.4 Notifications push
+
+| # | Action | Quand |
+| --- | --- | --- |
+| 1 | `USER_CONNECTED` | Connexion |
+| 2 | `USER_DISCONNECTED` | Déconnexion |
+| 3 | `NEW_CARD` | Nouvelle carte |
+| 4 | `CARD_UPDATED` | VA modifiée |
+| 5 | `NEW_BATTLE` | Battle lancée |
+| 6 | `BATTLE_UPDATE` | Vote enregistré |
+| 7 | `BATTLE_RESULT` | Battle terminée |
+| 8 | `LEGITIMACY_GRANTED` | Légitimation accordée |
+| 9 | `NEW_NOTIFICATION` | Notification |
+
+### 12.5 Points techniques
+
+| Point | Valeur |
+| --- | --- |
+| Timeout connexion | 5 secondes |
+| Timeout lecture | 10 secondes |
+| Max clients | 10 |
+| Encodage | UTF-8 |
+| Délimiteur | `\n` |
+| Taille max message | 4096 octets |
 
 ---
 
-# 13. Cas d'erreur
+## 13. Cas d'erreur
 
-## 13.1 Liste complète
+Voir le document complet : [`commun/cas-erreur.md`](commun/cas-erreur.md)
 
-| # | Code | Signification |
-|---:|---|---|
-| 1 | `INVALID_DATA` | Champs invalides |
-| 2 | `USERNAME_TAKEN` | Pseudo pris |
-| 3 | `CARD_NOT_FOUND` | Carte inexistante |
-| 4 | `CARD_NOT_ACTIVE` | Carte inactive |
-| 5 | `DUPLICATE_CARD` | Carte existante |
-| 6 | `ALREADY_RECOMMENDED` | Déjà recommandée |
-| 7 | `NOT_RECOMMENDED` | Rien à répudier |
-| 8 | `BATTLE_NOT_FOUND` | Battle inexistante |
-| 9 | `BATTLE_ALREADY_ACTIVE` | Carte en battle |
-| 10 | `ALREADY_VOTED` | Déjà voté |
-| 11 | `NOT_LEGITIMATE` | Non légitime |
-| 12 | `THRESHOLD_NOT_REACHED` | Seuil non atteint |
-| 13 | `CARDS_NOT_COMPATIBLE` | Paradigmes différents |
-| 14 | `VA_TOO_LOW` | VA < 5 |
-| 15 | `ALREADY_AUTHENTICATED` | Déjà authentifiée |
-| 16 | `SERVER_BUSY` | Serveur plein |
-| 17 | `INTERNAL_ERROR` | Erreur interne |
+### 13.1 Format standard
 
-**Document complet :** `cas-erreur.md`
+```json
+{"status":"ERROR","code":"USERNAME_TAKEN","message":"Ce pseudo est deja utilise."}
+```
+
+### 13.2 Liste complète
+
+| # | Code | Signification | Actions concernées |
+| --- | --- | --- | --- |
+| 1 | `INVALID_DATA` | Champs invalides | Toutes |
+| 2 | `USERNAME_TAKEN` | Pseudo déjà pris | LOGIN |
+| 3 | `CARD_NOT_FOUND` | Carte inexistante | RECOMMEND, REPUDIATE, START_BATTLE, VOTE_BATTLE, REQUEST_LEGITIMACY, CLAIM_CARD, AUTHENTICATE_CARD |
+| 4 | `CARD_NOT_ACTIVE` | Carte inactive | RECOMMEND, START_BATTLE |
+| 5 | `DUPLICATE_CARD` | Carte existante | CREATE_CARD |
+| 6 | `ALREADY_RECOMMENDED` | Déjà recommandée | RECOMMEND |
+| 7 | `NOT_RECOMMENDED` | Rien à répudier | REPUDIATE |
+| 8 | `BATTLE_NOT_FOUND` | Battle inexistante | VOTE_BATTLE |
+| 9 | `BATTLE_ALREADY_ACTIVE` | Carte déjà en battle | START_BATTLE |
+| 10 | `ALREADY_VOTED` | Déjà voté | VOTE_BATTLE |
+| 11 | `NOT_LEGITIMATE` | Non légitime | CLAIM_CARD, AUTHENTICATE_CARD |
+| 12 | `THRESHOLD_NOT_REACHED` | Seuil non atteint | REQUEST_LEGITIMACY |
+| 13 | `CARDS_NOT_COMPATIBLE` | Paradigmes différents | START_BATTLE |
+| 14 | `VA_TOO_LOW` | VA < 5 | START_BATTLE |
+| 15 | `ALREADY_AUTHENTICATED` | Déjà authentifiée | AUTHENTICATE_CARD |
+| 16 | `SERVER_BUSY` | Serveur plein | LOGIN |
+| 17 | `INTERNAL_ERROR` | Erreur interne | Toutes |
+
+### 13.3 Gestion côté serveur
+
+Quand une action échoue, le serveur :
+
+1. n'ajoute **pas** de bloc à la blockchain ;
+2. n'écrit **pas** en base de données ;
+3. renvoie un message d'erreur au client ;
+4. garde les structures en mémoire intactes.
+
+### 13.4 Gestion côté client
+
+Toutes les erreurs sont affichées dans un label rouge sous le formulaire ou la zone d'action.
+
+```java
+statusLabel.setStyle("-fx-text-fill: red;");
+statusLabel.setText(resp.getMessage());
+```
 
 ---
 
-# 14. Conclusion
+## 14. Conclusion
 
-## 14.1 Récapitulatif
+### 14.1 Récapitulatif
 
-Ce document a présenté la spécification technique complète du projet **SAE-Recommender** :
+Ce document a présenté la spécification technique complète du projet SAE-Recommender :
 
-- **Architecture serveur :** modulaire, multitâche, avec mutex
-- **Architecture client :** 5 couches (Vue, Contrôleur, Réseau, Modèle, Sérialisation)
-- **Organisation des données :** côté serveur (C) et côté client (Java)
-- **Schéma relationnel :** 7 tables PostgreSQL
-- **Blockchain :** structure de bloc, SHA-256, PoW
-- **Règles métier :** VA, légitimation, battle, authentification
-- **Diagrammes de séquence :** 8 scénarios principaux
-- **Protocole applicatif :** JSON + socket TCP
-- **Cas d'erreur :** 17 codes serveur + 7 client
+- **Architecture serveur** : modulaire, multitâche, avec mutex
+- **Architecture client** : 5 couches (Vue, Contrôleur, Réseau, Modèle, Sérialisation)
+- **Organisation des données** : côté serveur (C) et côté client (Java)
+- **Schéma relationnel** : 7 tables PostgreSQL
+- **Blockchain** : structure de bloc, SHA-256, PoW
+- **Règles métier** : VA, légitimation, battle, authentification
+- **Diagrammes de séquence** : 8 scénarios principaux
+- **Protocole applicatif** : JSON + socket TCP
+- **Cas d'erreur** : 17 codes serveur + 7 client
 
-## 14.2 Livrables Phase 1
+### 14.2 Livrables Phase 1
 
 | # | Livrable | Statut |
-|---:|---|---|
-| 1 | Répartition des rôles | ✅ |
-| 2 | Architecture du serveur | ✅ |
-| 3 | Architecture des clients | ✅ |
-| 4 | Organisation des données serveur | ✅ |
-| 5 | Organisation des données client | ✅ |
-| 6 | Schéma relationnel BDD | ✅ |
-| 7 | Structures blockchain | ✅ |
-| 8 | Données associées | ✅ |
-| 9 | Règles métier | ✅ |
-| 10 | Diagrammes de séquence | ✅ |
-| 11 | Protocole applicatif | ✅ |
-| 12 | Cas d'erreur | ✅ |
+| --- | --- | --- |
+| 1 | Répartition des rôles | ✓ |
+| 2 | Architecture du serveur | ✓ |
+| 3 | Architecture des clients | ✓ |
+| 4 | Organisation des données serveur | ✓ |
+| 5 | Organisation des données client | ✓ |
+| 6 | Schéma relationnel BDD | ✓ |
+| 7 | Structures blockchain | ✓ |
+| 8 | Données cartes / recos / battles | ✓ |
+| 9 | Règles métier | ✓ |
+| 10 | Diagrammes de séquence | ✓ |
+| 11 | Protocole applicatif | ✓ |
+| 12 | Cas d'erreur | ✓ |
 
-## 14.3 Prochaines étapes
 
-- **Phase 2 :** Codage et tests — 5 octobre 2026 → 18 décembre 2026
-- **Phase 3 :** Qualité — 4 janvier 2027 → 15 janvier 2027
-- **Phase 4 :** Présentation — 18 janvier 2027 → 19 janvier 2027
 
----
-
-# 15. Validation
-
-| Rôle | Nom | Date | Statut |
-|---|---|---|---|
-| Client Java | Usman | 25/09/2026 | ✅ |
-| Client Java | Omar | 25/09/2026 | ⏳ |
-| Serveur C | Mai | 25/09/2026 | ⏳ |
-| Serveur C | Albine | 25/09/2026 | ⏳ |
-| Blockchain + BDD | Iyore | 25/09/2026 | ⏳ |
-
----
-
-**Fin du document.**
