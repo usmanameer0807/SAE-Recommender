@@ -1,420 +1,125 @@
-# 📄 DOCUMENT 3 — `regles-metier.md`
+# Règles Métier — Plateforme SAÉ Recommender
 
-# Règles métier — SAE-Recommender
-
-> **Projet :** SAÉ BUT2 — S3 2026-2027
-> **Thème :** Langages de programmation
-
-
----
-
-## 📑 Sommaire
-
-1. [Valeur d'une carte (VA)](#1-valeur-dune-carte-va)
-2. [Critère de proximité (battle)](#2-critère-de-proximité-battle)
-3. [Légitimation](#3-légitimation)
-4. [Battle](#4-battle)
-5. [Vote pondéré](#5-vote-pondéré)
-6. [Revendication](#6-revendication)
-7. [Authentification](#7-authentification)
-8. [Cycle de vie d'une carte](#8-cycle-de-vie-dune-carte)
-9. [Client bot (optionnel)](#9-client-bot-optionnel)
-10. [Partage ciblé (optionnel)](#10-partage-ciblé-optionnel)
-11. [Codes d'erreur](#11-codes-derreur)
-12. [Récapitulatif des choix](#12-récapitulatif-des-choix)
+> **Projet :** SAÉ BUT2 S3 (2026-2027)  
+> **Thème retenu :** Langages de programmation  
+> **Auteur :** Équipe SAÉ (Groupe 1-C)  
+> **Statut :** Validé — Référence de conception pour la Phase 1  
 
 ---
 
-## 1. Valeur d'une carte (VA)
+## 1. Thème et structure d'une carte
 
-### 1.1 Règle
+### 1.1 Nature de l'objet
+Chaque carte représente un **langage de programmation**. La plateforme permet à la communauté d'évaluer, de recommander et de confronter la popularité et la pertinence des langages selon leur domaine d'application.
 
-La **VA (Valeur d'Appréciation)** représente la valeur d'une carte au sein de l'application.
+### 1.2 Attributs d'une carte
+Chaque carte est caractérisée par les données suivantes :
 
-| Action                  |                                     Impact sur la VA |
-| :---------------------- | ---------------------------------------------------: |
-| 1 recommandation active |                                            **+1 VA** |
-| 1 authentification      |                              **+10 VA** — bonus fixe |
-| Victoire en battle      | **Transfert de 50 %** des recommandations du perdant |
-| Défaite en battle       |                **Perte de 50 %** des recommandations |
+| Champ | Type | Description |
+| :--- | :--- | :--- |
+| `id` | Entier | Identifiant unique généré par le serveur |
+| `nom` | Chaîne (50) | Nom du langage (ex. `"Python"`, `"Rust"`, `"C++"`) |
+| `createur_historique` | Chaîne (100) | Concepteur d'origine (ex. `"Guido van Rossum"`, `"Bjarne Stroustrup"`) |
+| `annee_creation` | Entier | Année de première parution (ex. `1991`) |
+| `domaine` | Énumération | **Clé de proximité** pour les battles (`Web`, `GameDev`, `DataScience`, `Systems`, `Mobile`) |
+| `description` | Chaîne (500) | Présentation synthétique du langage et de ses usages |
+| `proprietaire_id` | Entier | Identifiant de l'utilisateur propriétaire courant de la carte |
+| `createur_id` | Entier | Identifiant de l'utilisateur ayant créé la carte sur la plateforme |
+| `valeur` (VA) | Entier | Valeur d'Appréciation courante de la carte |
+| `statut` | Énumération | État courant : `ACTIVE`, `EN_BATTLE`, `AUTHENTIFIEE`, `INACTIVE` |
 
-### 1.2 Formule
-
-La valeur d'une carte est calculée à partir du nombre de recommandations actives et des authentifications :
-
-```text
-VA(carte) = nb_recommandations_actives + (10 × nb_authentifications)
-```
-
-### 1.3 Justification
-
-* Mesure l'impact global de l'utilisateur.
-* Encourage la création de cartes de qualité.
-* Permet un calcul simple et compréhensible.
+Par défaut, à la création, le propriétaire d'une carte est l'utilisateur qui l'a créée (`proprietaire_id = createur_id`).
 
 ---
 
-## 2. Critère de proximité (battle)
+## 2. Recommandations et calcul de la valeur (VA)
 
-### 2.1 Règle
+### 2.1 Recommandation (« Like »)
+* Un utilisateur connecté peut recommander une carte avec le statut `ACTIVE` ou `AUTHENTIFIEE`.
+* Une recommandation apporte un soutien direct à la carte.
+* **Règle d'unicité :** Un utilisateur ne peut émettre qu'**une seule recommandation active** par carte.
 
-Deux cartes peuvent s'affronter dans une **battle** si elles possèdent le même champ `paradigm`.
+### 2.2 Répudiation (« Annulation du like »)
+* Il n'existe **pas de vote négatif (dislike)** sur la plateforme.
+* Un utilisateur peut uniquement **annuler (répudier)** un like qu'il a précédemment attribué.
+* Lors d'une répudiation, la contribution active est déduite de la carte, mais l'historique complet de l'action reste immuable dans la blockchain.
 
-### 2.2 Exemples
+### 2.3 Formule de calcul de la VA (Valeur d'Appréciation)
+La valeur d'une carte mesure son attractivité globale :
 
-| Carte 1          | Carte 2                | Battle autorisée ? |
-| :--------------- | :--------------------- | :----------------: |
-| Java (`OBJECT`)  | C++ (`OBJECT`)         |        ✅ Oui       |
-| Python (`MULTI`) | JavaScript (`MULTI`)   |        ✅ Oui       |
-| Java (`OBJECT`)  | Haskell (`FUNCTIONAL`) |        ❌ Non       |
+$$\text{VA} = \text{recommandations\_actives} + (10 \times \text{est\_authentifiee})$$
 
-### 2.3 Justification
-
-* Permet de comparer des langages comparables.
-* Évite les battles incohérentes.
-* Correspond à une logique naturelle pour le domaine des langages de programmation.
-
----
-
-## 3. Légitimation
-
-### 3.1 Conditions
-
-Un utilisateur peut demander la **légitimation** s'il remplit **au moins une** des conditions suivantes :
-
-| Option | Condition                                           |
-| :----: | :-------------------------------------------------- |
-|  **A** | Avoir émis au moins **5 recommandations valides**   |
-|  **B** | Être validé par le **créateur initial** de la carte |
-
-### 3.2 Droits accordés
-
-Une fois légitimé, l'utilisateur obtient les droits suivants :
-
-| Droit            | Description                      |
-| :--------------- | :------------------------------- |
-| **Authentifier** | Ajouter **+10 VA** à une carte   |
-| **Revendiquer**  | Devenir propriétaire d'une carte |
-
-### 3.3 Statuts
-
-| Statut     | Signification         |
-| :--------- | :-------------------- |
-| `PENDING`  | Demande en attente    |
-| `GRANTED`  | Légitimation accordée |
-| `REJECTED` | Légitimation refusée  |
-
-### 3.4 Justification
-
-* Évite le spam de demandes de légitimation.
-* Offre une alternative simple pour la simulation.
-* Correspond au processus défini dans le cahier des charges.
-* Aucune vérification d'identité réelle n'est effectuée.
+* **1 recommandation active :** `+1 VA`
+* **1 répudiation :** `-1 VA`
+* **Authentification de la carte :** bonus fixe permanent de `+10 VA`
 
 ---
 
-## 4. Battle
+## 3. Critères et règles des confrontations (« Battles »)
 
-### 4.1 Conditions de lancement
+### 3.1 Critère de proximité
+Deux cartes peuvent s'affronter en battle **si et seulement si elles partagent le même `domaine`**.
+* *Exemple autorisé :* `C++` vs `C#` (tous deux dans le domaine `GameDev`).
+* *Exemple autorisé :* `Python` vs `R` (tous deux dans le domaine `DataScience`).
+* *Exemple refusé :* `Rust` (`Systems`) vs `PHP` (`Web`) $\rightarrow$ Rejet (`CARDS_NOT_COMPATIBLE`).
 
-Une battle peut être lancée uniquement si toutes les conditions suivantes sont respectées :
+### 3.2 Conditions de lancement
+* Les deux cartes doivent avoir le statut `ACTIVE` ou `AUTHENTIFIEE`.
+* Le demandeur doit être le **propriétaire d'au moins une des deux cartes**.
+* Chaque carte doit posséder une valeur minimale de départ : **$\text{VA} \ge 5$**.
+* Une carte ne peut participer qu'à **une seule battle à la fois** (le serveur bascule son statut à `EN_BATTLE`).
 
-| Condition         | Valeur                           |
-| :---------------- | :------------------------------- |
-| Nombre de cartes  | Exactement **2**                 |
-| Statut requis     | `ACTIVE`                         |
-| Paradigme         | Identique                        |
-| VA minimum        | **5 VA**                         |
-| Battle simultanée | **1 seule par carte**            |
-| Durée             | **60 secondes**                  |
-| Lanceur           | Doit posséder **1 des 2 cartes** |
+### 3.3 Déroulement et règles de vote
+* **Durée du vote :** **60 secondes** à compter de l'acceptation par le serveur.
+* **Éligibilité des votants :** Tout utilisateur connecté peut voter, **à l'exception des propriétaires des deux cartes engagées**.
+* **Pondération du vote :** **1 utilisateur = 1 vote** (vote égalitaire, simple et transparent).
+* **Unicité :** 1 seul vote par utilisateur par battle.
 
-### 4.2 Règles de vote
+### 3.4 Règle de départage en cas d'égalité (Tie-break)
+Si à la fin des 60 secondes les deux cartes ont le même nombre de votes :
+1. La carte possédant la **VA initiale la plus élevée** avant le lancement de la battle est déclarée gagnante.
+2. Si l'égalité persiste, la carte la plus ancienne (identifiant `id` le plus petit) l'emporte.
+Il y a donc **toujours un vainqueur désigné**.
 
-| Règle           | Valeur                                           |
-| :-------------- | :----------------------------------------------- |
-| Votants         | Tous sauf les **2 propriétaires**                |
-| Nombre de votes | **1 par utilisateur**                            |
-| Pondération     | Nombre de recommandations émises (**minimum 1**) |
-| Signature       | SHA-256                                          |
-| Vote blanc      | Interdit                                         |
-| Égalité         | La carte ayant la **VA la plus élevée** gagne    |
-
-### 4.3 Résolution de la battle
-
-| Étape | Action                                                          |
-| ----: | :-------------------------------------------------------------- |
-| **1** | Déterminer le gagnant                                           |
-| **2** | Transférer **50 %** des recommandations du perdant              |
-| **3** | Incrémenter `winCount` du gagnant                               |
-| **4** | Si la VA du perdant atteint **0**, passer la carte à `INACTIVE` |
-| **5** | Enregistrer un bloc dans la blockchain                          |
-
-### 4.4 Justification
-
-* Le transfert de **50 %** constitue un compromis.
-* Le transfert crée un enjeu lors de la battle.
-* La pondération valorise les utilisateurs actifs.
-* Une durée de **60 secondes** est suffisante pour permettre le vote.
+### 3.5 Résolution de la battle et sort du perdant
+Conformément aux exigences du cahier des charges national :
+1. **Carte gagnante :** Récupère l'intégralité des **recommandations actives** associées à la carte perdante. Son compteur de victoires est incrémenté et son statut redevient `ACTIVE` (ou `AUTHENTIFIEE`).
+2. **Carte perdante :** Perd ses recommandations actives et bascule immédiatement au statut **`INACTIVE`** (archivée).
+3. **Immuabilité :** L'historique et les blocs antérieurs de la carte perdante restent définitivement inscrits dans la blockchain.
+4. **Interdictions :** Une carte `INACTIVE` ne peut plus être recommandée ni engagée dans une nouvelle battle.
 
 ---
 
-## 5. Vote pondéré
+## 4. Légitimation, Revendication et Authentification
 
-### 5.1 Règle
+### 4.1 Légitimation d'un utilisateur (Processus simulé)
+La légitimation permet à un utilisateur d'obtenir une reconnaissance officielle de son autorité vis-à-vis d'un langage :
+* **Condition d'obtention :** Tout utilisateur ayant émis au moins **3 recommandations valides** sur la plateforme peut demander la légitimation sur un langage.
+* **Effet :** L'utilisateur acquiert le statut de représentant légitime (`is_legitimate = true`), enregistré dans un bloc de la blockchain.
 
-Le poids d'un vote correspond au **nombre de recommandations émises par l'utilisateur**.
+### 4.2 Revendication d'une carte
+* **Objectif :** Permettre au représentant légitime de prendre le contrôle d'une carte créée initialement par un tiers.
+* **Condition :** Seul un utilisateur légitimé peut revendiquer une carte qui appartient à un propriétaire non légitime.
+* **Modalités de la transaction :** Le transfert de propriété est validé par le serveur de manière directe :
+  * Le champ `proprietaire_id` devient l'identifiant du demandeur légitime.
+  * Le champ `createur_id` reste inchangé pour préserver la mémoire de l'auteur d'origine.
+  * L'action est inscrite dans la blockchain (`ACTION_CLAIM_CARD`).
 
-| Utilisateur | Recommandations émises |   Poids du vote |
-| :---------- | ---------------------: | --------------: |
-| `usman`     |                     12 |          **12** |
-| `alice`     |                      5 |           **5** |
-| `bob`       |                      0 | **1** — minimum |
-
-> **Règle :** le poids minimum d'un vote est fixé à **1**, même si l'utilisateur n'a encore émis aucune recommandation.
-
-### 5.2 Justification
-
-* Valorise les utilisateurs actifs.
-* Évite que les votes des comptes sans activité aient tous le même poids.
-* Garantit un poids minimum de **1** pour les nouveaux utilisateurs.
-
----
-
-## 6. Revendication
-
-### 6.1 Conditions
-
-| Condition    | Détail                                          |
-| :----------- | :---------------------------------------------- |
-| Demandeur    | `isLegitimate = true`                           |
-| Cible        | Carte appartenant à un utilisateur non légitime |
-| Délai        | **10 blocs** de contestation                    |
-| Contestation | Le propriétaire actuel peut contester           |
-
-### 6.2 Résultat
-
-En cas de revendication acceptée :
-
-* Changement de propriétaire.
-* Enregistrement d'un bloc `ACTION_CLAIM_CARD`.
-* Aucun dédommagement financier.
-
-### 6.3 Justification
-
-* Permet à un utilisateur légitime de reprendre le contrôle d'une carte.
-* Le délai laisse une possibilité de contestation au propriétaire actuel.
-* Aucune transaction monétaire n'est nécessaire.
+### 4.3 Authentification d'une carte (Certification officielle)
+* **Condition :** Seul le propriétaire légitime d'une carte peut déclencher son authentification.
+* **Effets concrets :**
+  1. Le statut de la carte passe à **`AUTHENTIFIEE`** (affichage d'un badge officiel sur le client JavaFX).
+  2. La carte reçoit un bonus permanent de **`+10 VA`**.
+  3. Les caractéristiques de la carte (`nom`, `domaine`, `createur_historique`, `annee_creation`) deviennent **verrouillées** et ne peuvent plus être modifiées ni contestées.
 
 ---
 
-## 7. Authentification
+## 5. Règles système et gestion des erreurs
 
-### 7.1 Conditions
+### 5.1 Limites techniques de la plateforme
+* **Connexions simultanées :** Plafond fixé à **`MAX_CLIENTS = 20`** utilisateurs.
+* **Limite de possession :** Un utilisateur peut posséder au maximum **10 cartes actives** simultanément.
 
-| Condition      | Détail                          |
-| :------------- | :------------------------------ |
-| Acteur         | Utilisateur légitime            |
-| Cible          | Carte `ACTIVE` non authentifiée |
-| Effet          | **+10 VA**                      |
-| Nouveau statut | `AUTHENTIFIED`                  |
-
-### 7.2 Effets
-
-| Effet            | Description                                              |
-| :--------------- | :------------------------------------------------------- |
-| **Bonus**        | **+10 VA**                                               |
-| **Verrouillage** | Les informations ne sont plus modifiables                |
-| **Badge**        | Affichage du badge **« Certifiée »**                     |
-| **Traçabilité**  | Enregistrement de `authenticatedBy` et `authenticatedAt` |
-
-### 7.3 Justification
-
-* Ajoute de la valeur à une carte vérifiée.
-* Offre un bonus significatif sans être excessif.
-* Protège les informations validées.
-* Constitue un processus simulé.
-
----
-
-## 8. Cycle de vie d'une carte
-
-### 8.1 Diagramme
-
-```text
-             ┌──────────┐
-             │  CREATE  │
-             │   CARD   │
-             └────┬─────┘
-                  │
-                  ▼
-             ┌──────────┐
-             │  ACTIVE  │
-             └────┬─────┘
-                  │
-        ┌─────────┼──────────┐
-        │         │          │
-        ▼         ▼          ▼
-   RECOMMEND  AUTHENTICATE  BATTLE
-        │         │          │
-        │         ▼          │
-        │    AUTHENTIFIED    │
-        │                    │
-        │              ┌─────┴─────┐
-        │              │           │
-        │              ▼           ▼
-        │          VICTOIRE     DÉFAITE
-        │              │           │
-        │              ▼           ▼
-        │           ACTIVE     VA = 0 ?
-        │                          │
-        │                          ▼
-        │                      INACTIVE
-        │                          │
-        │                    Réactivation
-        │                          │
-        └──────────────────────────┘
-```
-
-### 8.2 Transitions
-
-| De          | Vers           | Condition                   |
-| :---------- | :------------- | :-------------------------- |
-| `[*]`       | `ACTIVE`       | `CREATE_CARD`               |
-| `ACTIVE`    | `ACTIVE`       | `RECOMMEND` — **+1 VA**     |
-| `ACTIVE`    | `AUTHENTIFIED` | `AUTHENTICATE` — **+10 VA** |
-| `ACTIVE`    | `IN_BATTLE`    | `START_BATTLE`              |
-| `IN_BATTLE` | `ACTIVE`       | Victoire                    |
-| `IN_BATTLE` | `INACTIVE`     | Défaite + **VA = 0**        |
-| `ACTIVE`    | `INACTIVE`     | Demande légitime            |
-| `INACTIVE`  | `ACTIVE`       | Réactivation                |
-
-### 8.3 Règles d'inactivation
-
-Une carte devient `INACTIVE` dans les cas suivants :
-
-* Elle perd une battle et sa VA tombe à **0**.
-* Un utilisateur légitime demande son inactivation.
-
-#### Une carte `INACTIVE`
-
-| Action                               | Autorisée ? |
-| :----------------------------------- | :---------: |
-| Recommander la carte                 |      ❌      |
-| Participer à une battle              |      ❌      |
-| Conserver la carte dans l'historique |      ✅      |
-| Réactiver la carte                   |      ✅      |
-
-### 8.4 Justification
-
-* Permet de nettoyer les cartes devenues inutiles.
-* Conserve l'historique des cartes.
-* Permet une réactivation ultérieure.
-
----
-
-## 9. Client bot (optionnel)
-
-### 9.1 Caractéristiques
-
-| Caractéristique | Valeur                                  |
-| :-------------- | :-------------------------------------- |
-| Type            | Java sans GUI                           |
-| Identification  | `isBot = true`                          |
-| Comportement    | Crée des cartes, recommande et vote     |
-| Impact VA       | Pas de VA artificielle                  |
-| Limites         | Ne peut pas revendiquer ni authentifier |
-
-### 9.2 Distinction bot / humain
-
-La distinction entre un bot et un utilisateur humain repose sur plusieurs éléments :
-
-* Champ `isBot` dans la BDD.
-* Préfixe `[BOT]` dans les logs.
-* Affichage avec une couleur différente dans l'interface.
-
-### 9.3 Justification
-
-* Facilite les tests.
-* Aide à la démonstration.
-* N'affecte pas artificiellement la VA.
-* Respecte le principe prévu dans le cahier des charges.
-
----
-
-## 10. Partage ciblé (optionnel)
-
-### 10.1 Règle
-
-Un utilisateur peut partager une carte avec un autre utilisateur.
-
-### 10.2 Différence avec une recommandation
-
-| Mécanisme          | Effet                                          |
-| :----------------- | :--------------------------------------------- |
-| **Recommandation** | Augmente la VA                                 |
-| **Partage ciblé**  | Transmet l'information à un utilisateur précis |
-
-### 10.3 Champs
-
-| Champ      | Description               |
-| :--------- | :------------------------ |
-| `sharedBy` | Utilisateur qui partage   |
-| `sharedTo` | Destinataire              |
-| `sharedAt` | Date du partage           |
-| `accepted` | `true` / `false` / `null` |
-
-### 10.4 Justification
-
-* Fonctionnalité optionnelle.
-* Permet de découvrir de nouvelles cartes.
-* Permet d'envoyer une notification au destinataire.
-
----
-
-## 11. Codes d'erreur
-
-| Code                    | Signification         |
-| :---------------------- | :-------------------- |
-| `INVALID_DATA`          | Champs invalides      |
-| `USERNAME_TAKEN`        | Pseudo pris           |
-| `CARD_NOT_FOUND`        | Carte inexistante     |
-| `CARD_NOT_ACTIVE`       | Carte inactive        |
-| `DUPLICATE_CARD`        | Carte existante       |
-| `ALREADY_RECOMMENDED`   | Déjà recommandée      |
-| `NOT_RECOMMENDED`       | Rien à répudier       |
-| `BATTLE_NOT_FOUND`      | Battle inexistante    |
-| `BATTLE_ALREADY_ACTIVE` | Carte en battle       |
-| `ALREADY_VOTED`         | Déjà voté             |
-| `NOT_LEGITIMATE`        | Non légitime          |
-| `THRESHOLD_NOT_REACHED` | Seuil non atteint     |
-| `CARDS_NOT_COMPATIBLE`  | Paradigmes différents |
-| `VA_TOO_LOW`            | VA < 5                |
-| `ALREADY_AUTHENTICATED` | Déjà authentifiée     |
-| `SERVER_BUSY`           | Serveur plein         |
-| `INTERNAL_ERROR`        | Erreur interne        |
-
----
-
-## 12. Récapitulatif des choix
-
-|  # | Choix               | Valeur                            | Justification                     |
-| -: | :------------------ | :-------------------------------- | :-------------------------------- |
-|  1 | Nature des cartes   | Langages                          | Formation informatique            |
-|  2 | Proximité battle    | Même `paradigm`                   | Comparaison pertinente            |
-|  3 | VA recommandation   | **+1**                            | Simple et mesurable               |
-|  4 | VA authentification | **+10**                           | Bonus significatif                |
-|  5 | VA utilisateur      | Somme des VA des cartes           | Mesure de l'impact global         |
-|  6 | Légitimation        | **5 recommandations OU créateur** | Évite le spam                     |
-|  7 | Battle              | **2 cartes, VA ≥ 5**              | Comparaison équitable             |
-|  8 | Durée battle        | **60 secondes**                   | Suffisant pour voter              |
-|  9 | Vote                | **1 par utilisateur, pondéré**    | Valorise l'activité               |
-| 10 | Transfert battle    | **50 % des recommandations**      | Enjeu sans ruine                  |
-| 11 | Inactivation        | **VA = 0**                        | Nettoyage naturel                 |
-| 12 | Revendication       | **Délai de 10 blocs**             | Laisse une chance au propriétaire |
-| 13 | Authentification    | **+10 VA**                        | Garantie de qualité               |
-| 14 | Client bot          | **Optionnel**                     | Aide à la démonstration           |
-| 15 | Partage ciblé       | **Optionnel**                     | Fonctionnalité supplémentaire     |
-
----
-
+### 5.2 Règle d'absence et déconnexion inattendue
+* Si un utilisateur se déconnecte pendant une battle, le vote continue jusqu'à l'expiration des 60 secondes.
+* Toute action non validée ou en cours d'envoi lors de la coupure d'un socket est abandonnée sans corrompre l'état mémoire ni la blockchain.
